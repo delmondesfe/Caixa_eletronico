@@ -1,4 +1,6 @@
+from logging import exception
 import mysql.connector
+from mysql.connector.errors import DataError
 
 conn = mysql.connector.connect(user='root',
                                password='password',
@@ -26,15 +28,19 @@ def cadastra_cliente():
 
     cli = Cliente(nome, data_nascimento, endereco, cpf, profissao)
 
-    add_cliente = ("INSERT INTO clientes"
-                   "(nome, data_nascimento,endereco,cpf,profissao)"
-                   "VALUES(%s,%s,%s,%s,%s)")
+    try:
 
-    dados_cliente = (cli.nome,cli.data_nascimento,cli.endereco,cli.cpf,cli.profissao)
+        add_cliente = ("INSERT INTO clientes"
+                    "(nome, data_nascimento,endereco,cpf,profissao)"
+                    "VALUES(%s,%s,%s,%s,%s)")
 
-    cursor.execute(add_cliente,dados_cliente)
-    emp_no = cursor.lastrowid
-    conn.commit()
+        dados_cliente = (cli.nome,cli.data_nascimento,cli.endereco,cli.cpf,cli.profissao)
+
+        cursor.execute(add_cliente,dados_cliente)
+        emp_no = cursor.lastrowid
+        conn.commit()
+    except DataError:
+        print('Por favor revisar os dados digitados.')
 
 
      
