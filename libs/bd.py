@@ -1,11 +1,13 @@
-import pymysql
-import pymysql.cursors
+import mysql.connector
 
-conn = pymysql.connect(host='localhost',
-                        user ='root',
-                        password='password',
-                        db = 'banco',
-                        cursorclass=pymysql.cursors.DictCursor)
+conn = mysql.connector.connect(user='root',password='password',host='localhost',database='banco')
+
+cursor = conn.cursor()
+
+query = ("select * from clientes")
 
 
-print(conn)
+cursor.execute(query)
+
+for registro in cursor:
+    print(registro)
